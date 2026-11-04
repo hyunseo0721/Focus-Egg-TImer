@@ -25,8 +25,20 @@
             -moz-osx-font-smoothing: grayscale;
         }
         .egg-shape { border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; overflow: hidden; position: relative; touch-action: none; }
-        .fill-transition { transition: height 0.05s linear; }
-        ::-webkit-scrollbar { display: none; }
+        .fill-transition { transition: none; } /* 애니메이션 충돌로 인한 멈춤/안내려감 버그 방지 */
+        
+        /* 스크롤바 커스텀 (마우스 드래그 및 휠 스크롤 가능) */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; display: block; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #4a4a4a; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+
+        /* 줄 노트 메모지 스타일 */
+        .lined-paper {
+            background-color: #ffffff;
+            background-image: repeating-linear-gradient(transparent, transparent 31px, #e2e8f0 31px, #e2e8f0 32px);
+            background-attachment: local;
+            line-height: 32px;
+        }
     </style>
 </head>
 <body>
@@ -53,8 +65,10 @@
                 curFocusStreak: "현재 연속 집중", maxFocusStreak: "최장 연속 집중", days: "일",
                 focusCompletedToday: " 오늘 집중 완료! ",
                 noFocusToday: "오늘 아직 집중 기록 없음",
-                addGroup: "새 그룹 추가", editGroup: "그룹 이름 수정", groupName: "그룹 이름", save: "저장", cancel: "취소", maxGroupsMsg: "최대 10개의 그룹만 만들 수 있습니다.", selectGroup: "어느 그룹에 방금 전 타이머를 추가하시겠습니까?", skip: "건너뛰기", noGroups: "생성된 그룹이 없습니다.", sessions: "개의 기록",
-                deleteConfirm: "이 그룹을 정말 삭제하시겠습니까? (관련 기록은 보존됩니다)"
+                addGroup: "새 그룹 추가", editGroup: "그룹 이름 수정", groupName: "그룹 이름", groupColor: "그룹 색상", save: "저장", cancel: "취소", maxGroupsMsg: "최대 10개의 그룹만 만들 수 있습니다.", selectGroup: "어느 그룹에 방금 전 타이머를 추가하시겠습니까?", skip: "안 함", noGroups: "생성된 그룹이 없습니다.", sessions: "개의 기록",
+                deleteConfirm: "이 그룹을 정말 삭제하시겠습니까? (관련 기록은 보존됩니다)",
+                memo: "메모", memoDateTitle: "기록 일시", deleteMemo: "메모 삭제", deleteMemoConfirm: "정말 이 메모를 삭제하시겠습니까?", memoPlaceholder: "이 집중 세션에 대한 메모를 남겨보세요...", close: "닫기", editMemo: "메모 수정", addMemo: "메모 추가",
+                addMemoQuestion: "메모를 추가하시겠습니까?", addMemoBtn: "메모 추가", skipMemoBtn: "나중에 하기"
             },
             EN: { 
                 lang: "Lang", color: "Color", start: "Start Focus", pause: "Pause", reset: "Reset", complete: "Complete", stopAlarm: "Stop", clock: "Clock", timer: "Egg Timer", sw: "Stopwatch", calendar: "Calendar", stats: "Stats", group: "Group",
@@ -66,8 +80,10 @@
                 curFocusStreak: "Current Streak", maxFocusStreak: "Best Streak", days: "days",
                 focusCompletedToday: " Focus Completed! ",
                 noFocusToday: "No focus records today",
-                addGroup: "Add New Group", editGroup: "Rename Group", groupName: "Group Name", save: "Save", cancel: "Cancel", maxGroupsMsg: "You can only create up to 10 groups.", selectGroup: "Add recent timer to which group?", skip: "Skip", noGroups: "No groups found.", sessions: "sessions",
-                deleteConfirm: "Are you sure you want to delete this group? (Records will be kept)"
+                addGroup: "Add New Group", editGroup: "Rename Group", groupName: "Group Name", groupColor: "Group Color", save: "Save", cancel: "Cancel", maxGroupsMsg: "You can only create up to 10 groups.", selectGroup: "Add recent timer to which group?", skip: "Skip", noGroups: "No groups found.", sessions: "sessions",	
+                deleteConfirm: "Are you sure you want to delete this group? (Records will be kept)",
+                memo: "Memo", memoDateTitle: "Session Time", deleteMemo: "Delete Memo", deleteMemoConfirm: "Are you sure you want to delete this memo?", memoPlaceholder: "Write a note for this focus session...", close: "Close", editMemo: "Edit Memo", addMemo: "Add Memo",
+                addMemoQuestion: "Would you like to add a memo?", addMemoBtn: "Add Memo", skipMemoBtn: "Later"
             },
             ES: { 
                 lang: "Idioma", color: "Color", start: "Iniciar Enfoque", pause: "Pausa", reset: "Restablecer", complete: "Completar", stopAlarm: "Detener", clock: "Reloj", timer: "Temporizador Huevo", sw: "Cronómetro", calendar: "Calendario", stats: "Estadísticas", group: "Grupo",
@@ -79,12 +95,28 @@
                 curFocusStreak: "Racha Actual", maxFocusStreak: "Mejor Racha", days: "días",
                 focusCompletedToday: " ¡Enfoque completado! ",
                 noFocusToday: "Sin registros hoy",
-                addGroup: "Añadir Nuevo Grupo", editGroup: "Renombrar Grupo", groupName: "Nombre del Grupo", save: "Guardar", cancel: "Cancelar", maxGroupsMsg: "Solo puedes crear hasta 10 grupos.", selectGroup: "¿A qué grupo añadir el temporizador reciente?", skip: "Saltar", noGroups: "No hay grupos.", sessions: "sesiones",
-                deleteConfirm: "¿Estás seguro de que deseas eliminar este grupo? (Los registros se mantendrán)"
+                addGroup: "Añadir Nuevo Grupo", editGroup: "Renombrar Grupo", groupName: "Nombre del Grupo", groupColor: "Color del Grupo", save: "Guardar", cancel: "Cancelar", maxGroupsMsg: "Solo puedes crear hasta 10 grupos.", selectGroup: "¿A qué grupo añadir el temporizador reciente?", skip: "No hacer", noGroups: "No hay grupos.", sessions: "sesiones",	
+                deleteConfirm: "¿Estás seguro de que deseas eliminar este grupo? (Los registros se mantendrán)",
+                memo: "Nota", memoDateTitle: "Fecha y hora", deleteMemo: "Eliminar Nota", deleteMemoConfirm: "¿Estás seguro de que deseas eliminar esta nota?", memoPlaceholder: "Escribe una nota para esta sesión...", close: "Cerrar", editMemo: "Editar Nota", addMemo: "Añadir Nota",
+                addMemoQuestion: "¿Deseas añadir una nota?", addMemoBtn: "Añadir Nota", skipMemoBtn: "Más tarde"
             }
         };
 
         function App() {
+            // --- F11 키 전체화면 단축키 이벤트 리스너 추가 ---
+            useEffect(() => {
+                const handleKeyDown = (e) => {
+                    if (e.key === 'F11') {
+                        e.preventDefault();
+                        if (window.pywebview && window.pywebview.api) {
+                            window.pywebview.api.toggle_fullscreen();
+                        }
+                    }
+                };
+                window.addEventListener('keydown', handleKeyDown);
+                return () => window.removeEventListener('keydown', handleKeyDown);
+            }, []);
+
             const [lang, setLang] = useState('KO');
             const [mode, setMode] = useState('timer'); 
             const [selectedColor, setSelectedColor] = useState('#3b82f6'); 
@@ -122,9 +154,16 @@
 
             const [groupModal, setGroupModal] = useState({ isOpen: false, mode: 'add', id: null });
             const [newGroupName, setNewGroupName] = useState("");
+            const [newGroupColor, setNewGroupColor] = useState('#3b82f6');
             const [activeGroupId, setActiveGroupId] = useState(null);
+            
+            // --- 타이머 완료 후 후속 모달 흐름 제어 상태 ---
             const [showGroupSelectModal, setShowGroupSelectModal] = useState(false);
+            const [showMemoPromptModal, setShowMemoPromptModal] = useState(false);
             const latestSessionRef = useRef(null);
+
+            // --- 메모 카드 모달 상태 ---
+            const [memoModal, setMemoModal] = useState({ isOpen: false, sessionTimestamp: null, text: '', isEditing: false });
 
             // --- 통계 및 기록 상태 ---
             const [sessions, setSessions] = useState(() => {
@@ -171,7 +210,7 @@
 
             useEffect(() => {
                 if (!audioRef.current) {
-                    audioRef.current = new Audio('soundeffect/alarm.wav');
+                    audioRef.current = new Audio('Focus Egg Timer/alarm.wav');
                     audioRef.current.loop = true;
                     audioRef.current.volume = 1.0; 
                 }
@@ -209,7 +248,7 @@
                             latestSessionRef.current = endTime; 
                             
                             setSessions(prev => {
-                                const newSession = { timestamp: endTime, duration: eggDurationRef.current, groupId: null, type: 'timer' };
+                                const newSession = { timestamp: endTime, duration: eggDurationRef.current, groupId: null, type: 'timer', memo: '' };
                                 const updated = [newSession, ...prev];
                                 try {
                                     localStorage.setItem('focus_egg_sessions_v2', JSON.stringify(updated));
@@ -229,7 +268,11 @@
                     const currentTime = Date.now();
                     if (eggIsRunningRef.current) {
                         const elapsed = eggAccRef.current + (currentTime - eggStartRef.current);
-                        if (elapsed < eggDurationRef.current) setEggElapsed(elapsed);
+                        if (elapsed < eggDurationRef.current) {
+                            setEggElapsed(elapsed);
+                        } else {
+                            setEggElapsed(eggDurationRef.current);
+                        }
                     }
                     if (swIsRunningRef.current) {
                         setSwElapsed(swAccRef.current + (currentTime - swStartRef.current));
@@ -239,6 +282,50 @@
                 requestRef.current = requestAnimationFrame(updateUI);
                 return () => cancelAnimationFrame(requestRef.current);
             }, []);
+
+            const openMemoModal = (session) => {
+                setMemoModal({
+                    isOpen: true,
+                    sessionTimestamp: session.timestamp,
+                    text: session.memo || '',
+                    isEditing: !session.memo 
+                });
+            };
+
+            const saveMemo = () => {
+                setSessions(prev => {
+                    const updated = prev.map(s => s.timestamp === memoModal.sessionTimestamp ? { ...s, memo: memoModal.text.trim() } : s);
+                    try { localStorage.setItem('focus_egg_sessions_v2', JSON.stringify(updated)); } catch (e) {}
+                    return updated;
+                });
+                setMemoModal({ isOpen: false, sessionTimestamp: null, text: '', isEditing: false });
+            };
+
+            const deleteMemo = () => {
+                if (window.confirm(t.deleteMemoConfirm)) {
+                    setSessions(prev => {
+                        const updated = prev.map(s => s.timestamp === memoModal.sessionTimestamp ? { ...s, memo: '' } : s);
+                        try { localStorage.setItem('focus_egg_sessions_v2', JSON.stringify(updated)); } catch (e) {}
+                        return updated;
+                    });
+                    setMemoModal({ isOpen: false, sessionTimestamp: null, text: '', isEditing: false });
+                }
+            };
+
+            const formatFullDateTime = (timestamp) => {
+                if (!timestamp) return '';
+                const d = new Date(timestamp);
+                return d.toLocaleDateString(t.locale, { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric', 
+                    weekday: 'short',
+                    hour: 'numeric',
+                    minute: '2-digit'
+                });
+            };
+
+            const memoSession = sessions.find(s => s.timestamp === memoModal.sessionTimestamp);
 
             const getStreak = (datesArray) => {
                 if (!datesArray || datesArray.length === 0) return { current: 0, max: 0 };
@@ -329,6 +416,26 @@
                 if (audioRef.current) { audioRef.current.pause(); audioRef.current.currentTime = 0; }
             };
 
+            const handleEggComplete = () => {
+                if (eggElapsed === 0) return;
+                const endTime = Date.now();
+                latestSessionRef.current = endTime;
+                setSessions(prev => {
+                    const newSession = { timestamp: endTime, duration: eggElapsed, groupId: null, type: 'timer', memo: '' };
+                    const updated = [newSession, ...prev];
+                    try { localStorage.setItem('focus_egg_sessions_v2', JSON.stringify(updated)); } catch (e) {}
+                    return updated;
+                });
+                setEggIsRunning(false); setEggIsAlarming(false); setEggElapsed(0); eggAccRef.current = 0;
+                if (audioRef.current) { audioRef.current.pause(); audioRef.current.currentTime = 0; }
+                
+                if (groups.length > 0) {
+                    setShowGroupSelectModal(true);
+                } else {
+                    setShowMemoPromptModal(true);
+                }
+            };
+
             const toggleSwRun = () => {
                 if (!swIsRunning) swStartRef.current = Date.now();
                 else swAccRef.current = swElapsed;
@@ -343,13 +450,17 @@
                 const endTime = Date.now();
                 latestSessionRef.current = endTime;
                 setSessions(prev => {
-                    const newSession = { timestamp: endTime, duration: swElapsed, groupId: null, type: 'stopwatch' };
+                    const newSession = { timestamp: endTime, duration: swElapsed, groupId: null, type: 'stopwatch', memo: '' };
                     const updated = [newSession, ...prev];
                     try { localStorage.setItem('focus_egg_sessions_v2', JSON.stringify(updated)); } catch (e) {}
                     return updated;
                 });
                 setSwIsRunning(false); setSwElapsed(0); swAccRef.current = 0;
-                if (groups.length > 0) setShowGroupSelectModal(true);
+                if (groups.length > 0) {
+                    setShowGroupSelectModal(true);
+                } else {
+                    setShowMemoPromptModal(true);
+                }
             };
 
             const handlePointerDown = (e) => { if (eggIsRunning) return; setIsDragging(true); e.target.setPointerCapture(e.pointerId); updateTimeFromPointer(e); };
@@ -373,7 +484,13 @@
 
             const getSwDisplayTime = () => {
                 const totalSec = Math.floor(swElapsed / 1000);
-                const m = Math.floor(totalSec / 60), s = totalSec % 60, ms = swElapsed % 1000;
+                const h = Math.floor(totalSec / 3600);
+                const m = Math.floor((totalSec% 3600) / 60);
+                const s = totalSec % 60;
+                const ms = swElapsed % 1000;
+                if (h > 0) {
+                    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}.${String(ms).padStart(3,'0')}`;
+                }
                 return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}.${String(ms).padStart(3,'0')}`;
             };
 
@@ -419,6 +536,7 @@
                     return updated;
                 });
                 setShowGroupSelectModal(false);
+                setShowMemoPromptModal(true);
             };
 
             const handleDeleteGroup = (groupId) => {
@@ -478,8 +596,8 @@
                 const nextMonth = () => { if (calMonth === 11) { setCalYear(calYear + 1); setCalMonth(0); } else { setCalMonth(calMonth + 1); } };
 
                 return (
-                    <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} className="w-full h-full flex items-center justify-center pb-10 px-4">
-                        <div className="flex flex-row gap-6 items-center justify-center w-full max-w-5xl">
+                    <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} className="w-full h-full overflow-y-auto custom-scrollbar pb-10 px-4 pt-4 sm:pt-10">
+                        <div className="flex flex-col xl:flex-row gap-6 items-center justify-center w-full max-w-5xl mx-auto min-h-full py-8">
                             <div className="w-full max-w-[550px] shrink-0 bg-[#141414] p-4 sm:p-12 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl border border-neutral-800/50">
                                 <div className="flex justify-between items-center mb-3 sm:mb-10 px-2">
                                     <button onClick={prevMonth} className="text-xl sm:text-3xl text-neutral-500 hover:text-white transition-colors p-2">&larr;</button>
@@ -585,8 +703,8 @@
                 const sortedYears = Object.keys(hierarchy).sort((a, b) => b - a);
 
                 return (
-                    <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} className="w-full h-full flex items-center justify-center pb-10 px-4 pt-4 sm:pt-0">
-                        <div className="flex flex-row gap-6 items-center justify-center w-full max-w-[1200px]">
+                    <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} className="w-full h-full overflow-y-auto custom-scrollbar pb-10 px-4 pt-4 sm:pt-10">
+                        <div className="flex flex-col xl:flex-row gap-6 items-center justify-center w-full max-w-[1200px] mx-auto min-h-full py-8">
                             <div className="w-[280px] shrink-0 bg-[#141414] h-[620px] p-8 rounded-[2.5rem] shadow-2xl border border-neutral-800/50 flex flex-col">
                                 <div className="text-2xl font-bold tracking-wide text-white mb-10 px-2">{t.statsSummary}</div>
                                 <div className="flex flex-col gap-8 w-full px-2">
@@ -608,7 +726,7 @@
                             <div className="w-full max-w-[550px] shrink-0 bg-[#141414] h-[620px] p-4 sm:p-10 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl border border-neutral-800/50 flex flex-col">
                                 <div className="text-lg sm:text-3xl font-medium tracking-wide text-white mb-3 sm:mb-6 px-2">{t.stats}</div>
 
-                                <div className="flex-1 overflow-y-auto pr-2 space-y-6 sm:space-y-8" style={{ scrollbarWidth: 'none' }}>
+                                <div className="flex-1 overflow-y-auto pr-2 space-y-6 sm:space-y-8 custom-scrollbar">
                                     {sortedYears.length === 0 ? (
                                         <div className="h-full flex items-center justify-center text-neutral-600 pb-10">{t.noRecords}</div>
                                     ) : (
@@ -671,19 +789,29 @@
                                                                                             <span className="text-white font-medium text-xs sm:text-base">{formatDuration(dayTotal)}</span>
                                                                                         </div>
                                                                                         <div className="flex flex-col gap-1.5">
-                                                                                            {daySessions.map((session, idx) => (
-                                                                                                <div key={idx} className="flex items-center justify-between bg-[#1f1f1f] px-3.5 py-2.5 sm:px-5 sm:py-4 rounded-2xl border border-neutral-800/80 hover:border-neutral-700 transition-colors">
-                                                                                                    <div className="flex items-center gap-2.5">
-                                                                                                        {(!session.type || session.type === 'timer') ? (
-                                                                                                            <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0" style={{ backgroundColor: selectedColor }}></div>
-                                                                                                        ) : (
-                                                                                                            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                                                                                        )}
-                                                                                                        <span className="text-neutral-300 font-medium text-xs sm:text-base tracking-wide">{formatTime(session.timestamp)}</span>
+                                                                                            {daySessions.map((session, idx) => {
+                                                                                                const sessionGroup = session.groupId ? groups.find(g => g.id === session.groupId) : null;
+                                                                                                return (
+                                                                                                    <div key={idx} className="flex items-center justify-between bg-[#1f1f1f] px-3.5 py-2.5 sm:px-5 sm:py-4 rounded-2xl border border-neutral-800/80 hover:border-neutral-700 transition-colors" style={sessionGroup?.color ? { borderColor: sessionGroup.color } : {}}>
+                                                                                                        <div className="flex items-center gap-2.5">
+                                                                                                            {(!session.type || session.type === 'timer') ? (
+                                                                                                                <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0" style={{ backgroundColor: selectedColor }}></div>
+                                                                                                            ) : (
+                                                                                                                <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-neutral-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                                                                            )}
+                                                                                                            <span className="text-neutral-300 font-medium text-xs sm:text-base tracking-wide">{formatTime(session.timestamp)}</span>
+                                                                                                        </div>
+                                                                                                        <div className="flex items-center gap-3">
+                                                                                                            <button onClick={() => openMemoModal(session)} title={t.memo} className={`p-1.5 rounded-lg transition-colors ${session.memo ? 'text-white hover:text-neutral-300' : 'text-neutral-500 hover:text-neutral-300'}`}>
+                                                                                                                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill={session.memo ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
+                                                                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                                                                                </svg>
+                                                                                                            </button>
+                                                                                                            <span className="text-neutral-100 font-medium text-xs sm:text-base">{formatDuration(session.duration)}</span>
+                                                                                                        </div>
                                                                                                     </div>
-                                                                                                    <span className="text-neutral-100 font-medium text-xs sm:text-base">{formatDuration(session.duration)}</span>
-                                                                                                </div>
-                                                                                            ))}
+                                                                                                );
+                                                                                            })}
                                                                                         </div>
                                                                                     </div>
                                                                                 );
@@ -734,16 +862,18 @@
                     const group = groups.find(g => g.id === activeGroupId);
                     const groupSessions = sessions.filter(s => s.groupId === activeGroupId).sort((a,b) => b.timestamp - a.timestamp);
                     const totalDuration = groupSessions.reduce((sum, s) => sum + s.duration, 0);
-                    
+
                     return (
-                        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} className="w-full h-full flex items-center justify-center pb-10 px-4 pt-4 sm:pt-0">
-                            <div className="w-full max-w-[600px] shrink-0 bg-[#141414] h-[620px] p-6 sm:p-10 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl border border-neutral-800/50 flex flex-col">
+                        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} className="w-full h-full overflow-y-auto custom-scrollbar pb-10 px-4 pt-4 sm:pt-10">
+                            <div className="w-full max-w-[600px] shrink-0 bg-[#141414] h-[620px] p-6 sm:p-10 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl border-2 flex flex-col mx-auto" style={{ borderColor: group?.color || selectedColor }}>
                                 <div className="flex items-center justify-between mb-6">
                                     <div className="flex items-center gap-3">
                                         <button onClick={() => setActiveGroupId(null)} className="text-neutral-500 hover:text-white text-2xl p-2">&larr;</button>
-                                        <div className="text-2xl sm:text-3xl font-bold text-white max-w-[200px] truncate">{group?.name}</div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="text-2xl sm:text-3xl font-bold text-white max-w-[200px] truncate">{group?.name}</div>
+                                        </div>
                                         <div className="flex gap-1 ml-1">
-                                            <button onClick={() => { setGroupModal({ isOpen: true, mode: 'edit', id: group.id }); setNewGroupName(group.name); }} className="text-neutral-500 hover:text-white p-1.5 transition-colors">
+                                            <button onClick={() => { setGroupModal({ isOpen: true, mode: 'edit', id: group.id }); setNewGroupName(group.name); setNewGroupColor(group.color || selectedColor); }} className="text-neutral-500 hover:text-white p-1.5 transition-colors">
                                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                             </button>
                                             <button onClick={() => handleDeleteGroup(group.id)} className="text-neutral-500 hover:text-red-400 p-1.5 transition-colors">
@@ -755,12 +885,12 @@
                                         {formatDetailedTotal(totalDuration)}
                                     </div>
                                 </div>
-                                <div className="flex-1 overflow-y-auto space-y-3" style={{ scrollbarWidth: 'none' }}>
+                                <div className="flex-1 overflow-y-auto space-y-3 custom-scrollbar pr-2">
                                     {groupSessions.length === 0 ? (
                                         <div className="text-neutral-500 text-center mt-10 h-full flex items-center justify-center">{t.noRecords}</div>
                                     ) : (
                                         groupSessions.map(session => (
-                                            <div key={session.timestamp} className="flex items-center justify-between bg-[#1f1f1f] px-5 py-4 rounded-2xl border border-neutral-800/80">
+                                            <div key={session.timestamp} className="flex items-center justify-between bg-[#1f1f1f] px-5 py-4 rounded-2xl border border-neutral-800/80" style={group?.color ? { borderColor: group.color } : {}}>
                                                 <div className="flex flex-col gap-1.5">
                                                     <span className="text-white font-medium">{new Date(session.timestamp).toLocaleDateString(t.locale, { month: 'short', day: 'numeric', weekday: 'short' })}</span>
                                                     <div className="flex items-center gap-2 pl-2">
@@ -772,7 +902,14 @@
                                                         <span className="text-neutral-400 text-sm">{formatTime(session.timestamp)}</span>
                                                     </div>
                                                 </div>
-                                                <span className="text-white font-bold text-lg">{formatDuration(session.duration)}</span>
+                                                <div className="flex items-center gap-3">
+                                                    <button onClick={() => openMemoModal(session)} title={t.memo} className={`p-1.5 rounded-lg transition-colors ${session.memo ? 'text-white hover:text-neutral-300' : 'text-neutral-500 hover:text-neutral-300'}`}>
+                                                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill={session.memo ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                        </svg>
+                                                    </button>
+                                                    <span className="text-white font-bold text-lg">{formatDuration(session.duration)}</span>
+                                                </div>
                                             </div>
                                         ))
                                     )}
@@ -783,28 +920,34 @@
                 }
 
                 return (
-                    <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} className="w-full h-full flex items-center justify-center pb-10 px-4 pt-4 sm:pt-0">
-                        <div className="w-full max-w-[600px] shrink-0 bg-[#141414] h-[620px] p-6 sm:p-10 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl border border-neutral-800/50 flex flex-col">
+                    <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} className="w-full h-full overflow-y-auto custom-scrollbar pb-10 px-4 pt-4 sm:pt-10">
+                        <div className="w-full max-w-[600px] shrink-0 bg-[#141414] h-[620px] p-6 sm:p-10 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl border border-neutral-800/50 flex flex-col mx-auto">
                             <div className="flex items-center justify-between mb-8">
                                 <div className="text-2xl sm:text-3xl font-bold text-white">{t.group}</div>
-                                {groups.length < 10 && (
-                                    <button onClick={() => { setGroupModal({ isOpen: true, mode: 'add', id: null }); setNewGroupName(''); }} className="bg-white text-black px-4 py-2 rounded-full font-bold text-sm hover:bg-neutral-200 transition-colors">
-                                        + {t.addGroup}
-                                    </button>
-                                )}
+                                <button onClick={() => { setGroupModal({ isOpen: true, mode: 'add', id: null }); setNewGroupName(''); setNewGroupColor(selectedColor); }} className="bg-white text-black px-4 py-2 rounded-full font-bold text-sm hover:bg-neutral-200 transition-colors">
+                                    + {t.addGroup}
+                                </button>
                             </div>
                             {groups.length === 0 ? (
                                 <div className="text-neutral-500 text-center mt-10 h-full flex items-center justify-center">{t.noGroups}</div>
                             ) : (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-y-auto custom-scrollbar pr-2" style={{ maxHeight: '480px' }}>
                                     {groups.map(g => {
                                         const groupSessions = sessions.filter(s => s.groupId === g.id);
                                         const count = groupSessions.length;
                                         const totalDuration = groupSessions.reduce((sum, s) => sum + s.duration, 0);
+
                                         return (
-                                            <button key={g.id} onClick={() => setActiveGroupId(g.id)} className="bg-[#1f1f1f] border border-neutral-800 hover:border-neutral-600 rounded-2xl p-6 flex justify-between items-center transition-colors text-left">
+                                            <button 
+                                                key={g.id} 
+                                                onClick={() => setActiveGroupId(g.id)} 
+                                                className="bg-[#1f1f1f] rounded-2xl p-6 flex justify-between items-center transition-all text-left border-2 hover:brightness-125"
+                                                style={{ borderColor: g.color || selectedColor }}
+                                            >
                                                 <div className="flex flex-col items-start gap-2 overflow-hidden">
-                                                    <span className="text-white font-bold text-lg truncate w-full">{g.name}</span>
+                                                    <div className="flex items-center gap-2.5 w-full">
+                                                        <span className="text-white font-bold text-lg truncate w-full">{g.name}</span>
+                                                    </div>
                                                     <span className="text-neutral-500 text-sm">{count} {t.sessions}</span>
                                                 </div>
                                                 <div className="text-white font-medium text-base sm:text-lg shrink-0 ml-2">
@@ -815,9 +958,6 @@
                                     })}
                                 </div>
                             )}
-                            {groups.length >= 10 && (
-                                <div className="text-neutral-500 text-sm text-center mt-4">{t.maxGroupsMsg}</div>
-                            )}
                         </div>
                     </motion.div>
                 );
@@ -825,6 +965,81 @@
 
             return (
                 <div className="w-screen h-screen flex flex-col sm:flex-row relative overflow-hidden">
+                    {/* 메모 카드 모달 (흰색 줄 노트 스타일) */}
+                    <AnimatePresence>
+                        {memoModal.isOpen && (
+                            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-4">
+                                <motion.div 
+                                    initial={{ scale: 0.9, opacity: 0, y: 20 }} 
+                                    animate={{ scale: 1, opacity: 1, y: 0 }} 
+                                    exit={{ scale: 0.9, opacity: 0, y: 20 }} 
+                                    className="bg-white text-gray-800 p-6 sm:p-8 rounded-3xl shadow-2xl max-w-md w-full flex flex-col gap-4 border border-gray-200 relative overflow-hidden"
+                                >
+                                    <div className="flex justify-between items-center border-b border-gray-200 pb-3">
+                                        <div className="flex flex-col">
+                                            <span className="text-xs text-gray-400 font-semibold uppercase tracking-wider">{t.memoDateTitle}</span>
+                                            <span className="text-gray-800 font-bold text-base sm:text-lg">
+                                                {memoSession ? formatFullDateTime(memoSession.timestamp) : ''}
+                                            </span>
+                                        </div>
+                                        <button onClick={() => setMemoModal({ isOpen: false, sessionTimestamp: null, text: '', isEditing: false })} className="text-gray-400 hover:text-gray-600 p-1">
+                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                        </button>
+                                    </div>
+
+                                    <div className="flex-1 min-h-[180px] max-h-[300px] overflow-y-auto">
+                                        <textarea
+                                            value={memoModal.text}
+                                            onChange={e => {
+                                                if (memoModal.isEditing) {
+                                                    setMemoModal(prev => ({ ...prev, text: e.target.value }));
+                                                }
+                                            }}
+                                            readOnly={!memoModal.isEditing}
+                                            placeholder={memoModal.isEditing ? t.memoPlaceholder : (memoModal.text ? "" : t.noRecords)}
+                                            className={`w-full h-full lined-paper bg-transparent border-none outline-none resize-none font-sans text-gray-800 text-base p-1 focus:ring-0 ${!memoModal.isEditing ? 'cursor-default' : ''}`}
+                                            style={{ minHeight: '160px' }}
+                                        />
+                                    </div>
+
+                                    <div className="flex items-center justify-between pt-2 border-t border-gray-200">
+                                        {memoSession && memoSession.memo && !memoModal.isEditing ? (
+                                            <button onClick={deleteMemo} className="flex items-center gap-1.5 text-red-500 hover:text-red-700 font-semibold text-sm transition-colors py-2 px-3 rounded-lg hover:bg-red-50">
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                {t.deleteMemo}
+                                            </button>
+                                        ) : <div></div>}
+
+                                        <div className="flex gap-2">
+                                            {!memoModal.isEditing ? (
+                                                <>
+                                                    <button onClick={() => setMemoModal({ isOpen: false, sessionTimestamp: null, text: '', isEditing: false })} className="px-4 py-2 rounded-xl border border-gray-300 text-gray-600 font-medium hover:bg-gray-100 text-sm transition-colors">
+                                                        {t.close}
+                                                    </button>
+                                                    <button onClick={() => setMemoModal(prev => ({ ...prev, isEditing: true }))} className="px-5 py-2 rounded-xl bg-gray-900 text-white font-bold hover:bg-black text-sm transition-colors shadow-md">
+                                                        {memoSession && memoSession.memo ? t.editMemo : t.addMemo}
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <button onClick={() => {
+                                                        const origMemo = memoSession ? memoSession.memo || '' : '';
+                                                        setMemoModal(prev => ({ ...prev, text: origMemo, isEditing: false }));
+                                                    }} className="px-4 py-2 rounded-xl border border-gray-300 text-gray-600 font-medium hover:bg-gray-100 text-sm transition-colors">
+                                                        {t.cancel}
+                                                    </button>
+                                                    <button onClick={saveMemo} className="px-5 py-2 rounded-xl bg-gray-900 text-white font-bold hover:bg-black text-sm transition-colors shadow-md">
+                                                        {t.save}
+                                                    </button>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            </div>
+                        )}
+                    </AnimatePresence>
+
                     {/* 그룹 추가 및 편집 모달 */}
                     <AnimatePresence>
                         {groupModal.isOpen && (
@@ -832,14 +1047,30 @@
                                 <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-[#141414] border border-neutral-800 p-6 sm:p-10 rounded-3xl shadow-2xl max-w-sm w-full flex flex-col gap-6">
                                     <div className="text-white text-lg font-bold text-center">{groupModal.mode === 'add' ? t.addGroup : t.editGroup}</div>
                                     <input type="text" value={newGroupName} onChange={e => setNewGroupName(e.target.value)} placeholder={t.groupName} className="bg-[#2a2a2a] text-white px-4 py-3 rounded-xl outline-none focus:ring-2 focus:ring-white transition-all" maxLength={20} />
+                                    
+                                    <div className="flex flex-col gap-2">
+                                        <span className="text-xs text-neutral-400 font-medium px-1">{t.groupColor}</span>
+                                        <div className="flex items-center gap-2 justify-between bg-[#2a2a2a] p-3 rounded-xl">
+                                            {themeColors.map(color => (
+                                                <button
+                                                    key={color.id}
+                                                    type="button"
+                                                    onClick={() => setNewGroupColor(color.value)}
+                                                    className={`w-6 h-6 rounded-full transition-all ${newGroupColor === color.value ? 'ring-2 ring-white ring-offset-2 ring-offset-[#2a2a2a] scale-110' : 'opacity-70 hover:opacity-100'}`}
+                                                    style={{ backgroundColor: color.value }}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+
                                     <div className="flex gap-3">
                                         <button onClick={() => { setGroupModal({ isOpen: false, mode: 'add', id: null }); setNewGroupName(''); }} className="flex-1 bg-transparent border border-neutral-600 text-neutral-400 py-3 rounded-xl hover:text-white transition-colors">{t.cancel}</button>
                                         <button onClick={() => {
                                             if (newGroupName.trim()) {
-                                                if (groupModal.mode === 'add' && groups.length < 10) {
-                                                    setGroups([...groups, { id: Date.now(), name: newGroupName.trim() }]);
+                                                if (groupModal.mode === 'add') {
+                                                    setGroups([...groups, { id: Date.now(), name: newGroupName.trim(), color: newGroupColor }]);
                                                 } else if (groupModal.mode === 'edit') {
-                                                    setGroups(groups.map(g => g.id === groupModal.id ? { ...g, name: newGroupName.trim() } : g));
+                                                    setGroups(groups.map(g => g.id === groupModal.id ? { ...g, name: newGroupName.trim(), color: newGroupColor } : g));
                                                 }
                                                 setGroupModal({ isOpen: false, mode: 'add', id: null });
                                                 setNewGroupName('');
@@ -851,20 +1082,64 @@
                         )}
                     </AnimatePresence>
 
-                    {/* 방금 끝난 타이머/스톱워치 그룹 지정 모달 */}
+                    {/* 1단계: 방금 끝난 타이머/스톱워치 그룹 지정 모달 */}
                     <AnimatePresence>
                         {showGroupSelectModal && (
                             <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
                                 <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-[#141414] border border-neutral-800 p-6 sm:p-10 rounded-3xl shadow-2xl max-w-sm w-full flex flex-col gap-6">
                                     <div className="text-white text-lg font-bold text-center px-4 leading-snug">{t.selectGroup}</div>
-                                    <div className="flex flex-col gap-3 max-h-60 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+                                    <div className="flex flex-col gap-3 max-h-60 overflow-y-auto custom-scrollbar pr-1">
                                         {groups.map(g => (
-                                            <button key={g.id} onClick={() => assignGroupToSession(g.id)} className="bg-[#2a2a2a] hover:bg-white hover:text-black text-white font-bold py-3.5 rounded-xl transition-all border border-transparent hover:border-white">
+                                            <button 
+                                                key={g.id} 
+                                                onClick={() => assignGroupToSession(g.id)} 
+                                                className="bg-[#2a2a2a] hover:bg-white hover:text-black text-white font-bold py-3.5 rounded-xl transition-all border-2 flex items-center justify-center gap-2"
+                                                style={{ borderColor: g.color || selectedColor }}
+                                            >
                                                 {g.name}
                                             </button>
                                         ))}
                                     </div>
-                                    <button onClick={() => setShowGroupSelectModal(false)} className="text-neutral-500 hover:text-white text-sm mt-2 transition-colors">{t.skip}</button>
+                                    <button onClick={() => {
+                                        setShowGroupSelectModal(false);
+                                        setShowMemoPromptModal(true);
+                                    }} className="text-neutral-500 hover:text-white text-sm mt-2 transition-colors">{t.skip}</button>
+                                </motion.div>
+                            </div>
+                        )}
+                    </AnimatePresence>
+
+                    {/* 2단계: 메모 추가 여부 선택 모달 */}
+                    <AnimatePresence>
+                        {showMemoPromptModal && (
+                            <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+                                <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-[#141414] border border-neutral-800 p-6 sm:p-10 rounded-3xl shadow-2xl max-w-sm w-full flex flex-col gap-6">
+                                    <div className="text-white text-lg font-bold text-center px-4 leading-snug">{t.addMemoQuestion}</div>
+                                    <div className="flex flex-col gap-3">
+                                        <button 
+                                            onClick={() => {
+                                                setShowMemoPromptModal(false);
+                                                const targetSession = sessions.find(s => s.timestamp === latestSessionRef.current);
+                                                if (targetSession) {
+                                                    setMemoModal({
+                                                        isOpen: true,
+                                                        sessionTimestamp: targetSession.timestamp,
+                                                        text: targetSession.memo || '',
+                                                        isEditing: true
+                                                    });
+                                                }
+                                            }} 
+                                            className="bg-white hover:bg-neutral-200 text-black font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2"
+                                        >
+                                            {t.addMemoBtn}
+                                        </button>
+                                        <button 
+                                            onClick={() => setShowMemoPromptModal(false)} 
+                                            className="bg-[#2a2a2a] hover:bg-neutral-800 text-neutral-300 font-medium py-3.5 rounded-xl transition-all flex items-center justify-center gap-2"
+                                        >
+                                            {t.skipMemoBtn}
+                                        </button>
+                                    </div>
                                 </motion.div>
                             </div>
                         )}
@@ -879,7 +1154,7 @@
                                     <button onClick={() => setLang('EN')} className={`text-[11px] sm:text-sm font-bold w-7 h-7 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-colors ${lang === 'EN' ? 'bg-white text-black' : 'text-neutral-400 hover:bg-neutral-800'}`}>EN</button>
                                     <button onClick={() => setLang('ES')} className={`text-[11px] sm:text-sm font-bold w-7 h-7 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-colors ${lang === 'ES' ? 'bg-white text-black' : 'text-neutral-400 hover:bg-neutral-800'}`}>ES</button>
                                 </div>
-                                <div className="flex sm:flex-col items-center gap-1.5 sm:gap-3 sm:flex-1 sm:overflow-y-auto sm:w-full sm:mt-6">
+                                <div className="flex sm:flex-col items-center gap-1.5 sm:gap-3 sm:flex-1 sm:overflow-y-auto sm:w-full sm:mt-6 custom-scrollbar">
                                     <span className="hidden sm:inline text-xs text-neutral-500 font-bold">{t.color}</span>
                                     {themeColors.map(color => (
                                         <button key={color.id} onClick={() => setSelectedColor(color.value)} className={`w-5 h-5 sm:w-8 sm:h-8 rounded-full transition-all duration-200 shrink-0 ${selectedColor === color.value ? 'ring-2 ring-white ring-offset-2 sm:ring-offset-4 ring-offset-[#141414] scale-110' : 'hover:scale-110 opacity-70 hover:opacity-100'}`} style={{ backgroundColor: color.value }} />
@@ -921,11 +1196,11 @@
                                 }}
                                 style={{ transformOrigin: "center center" }}
                             >
-                                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-20">
-                                    <div ref={eggRef} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerUp} onPointerCancel={handlePointerUp} className={`egg-shape w-44 h-60 sm:w-72 sm:h-96 bg-[#2a2a2a] shadow-2xl flex-shrink-0 ${!eggIsRunning ? 'cursor-ns-resize' : 'cursor-default'}`}>
-                                        <div className={`absolute bottom-0 w-full ${isDragging ? '' : 'fill-transition'}`} style={{ height: `${getFillPercentage()}%`, backgroundColor: selectedColor }}></div>
+                                <div className="flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-20">
+                                    <div ref={eggRef} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerUp} onPointerCancel={handlePointerUp} className={`egg-shape w-44 h-60 md:w-60 md:h-80 lg:w-72 lg:h-96 bg-[#2a2a2a] shadow-2xl flex-shrink-0 ${!eggIsRunning ? 'cursor-ns-resize' : 'cursor-default'}`}>
+                                        <div className="absolute bottom-0 w-full fill-transition" style={{ height: `${getFillPercentage()}%`, backgroundColor: selectedColor }}></div>
                                     </div>
-                                    <div className="text-6xl sm:text-[7rem] font-mono tracking-tighter text-white text-center sm:text-left sm:w-80 flex-shrink-0 leading-none">
+                                    <div className="text-6xl md:text-7xl lg:text-[7rem] font-mono tracking-tighter text-white text-center lg:text-left lg:w-80 flex-shrink-0 leading-none">
                                         {getEggDisplayTime()}
                                     </div>
                                 </div>
@@ -946,7 +1221,7 @@
                                 }}
                                 style={{ transformOrigin: "center center" }}
                             >
-                                <div className="text-6xl sm:text-[9rem] font-mono tracking-tighter text-white leading-none text-center">
+                                <div className="text-6xl md:text-8xl lg:text-[9rem] font-mono tracking-tighter text-white leading-none text-center">
                                     {getSwDisplayTime()}
                                 </div>
                             </motion.div>
@@ -956,8 +1231,11 @@
                             <div className="absolute right-4 bottom-4 sm:right-12 sm:bottom-12 flex flex-col items-end gap-2.5 sm:gap-6 z-10">
                                 <AnimatePresence>
                                     {!eggIsRunning && (eggDuration !== 1800000 || eggElapsed > 0) && !eggIsAlarming && (
-                                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-4">
                                             <button onClick={handleEggReset} className="text-neutral-400 hover:text-white underline underline-offset-4 text-xs sm:text-sm font-medium">{t.reset}</button>
+                                            {eggElapsed > 0 && (
+                                                <button onClick={handleEggComplete} className="text-blue-400 hover:text-blue-300 underline underline-offset-4 text-xs sm:text-sm font-medium">{t.complete}</button>
+                                            )}
                                         </motion.div>
                                     )}
                                 </AnimatePresence>
@@ -966,7 +1244,14 @@
                                         {eggIsRunning ? t.pause : t.start}
                                     </button>
                                 ) : (
-                                    <button onClick={() => { handleEggReset(); if (groups.length > 0) setShowGroupSelectModal(true); }} className="px-6 py-3 sm:px-10 sm:py-5 bg-red-500 text-white font-bold text-sm sm:text-xl rounded-full animate-pulse shadow-[0_0_40px_rgba(239,68,68,0.8)]">{t.stopAlarm}</button>
+                                    <button onClick={() => { 
+                                        handleEggReset(); 
+                                        if (groups.length > 0) {
+                                            setShowGroupSelectModal(true);
+                                        } else {
+                                            setShowMemoPromptModal(true);
+                                        }
+                                    }} className="px-6 py-3 sm:px-10 sm:py-5 bg-red-500 text-white font-bold text-sm sm:text-xl rounded-full animate-pulse shadow-[0_0_40px_rgba(239,68,68,0.8)]">{t.stopAlarm}</button>
                                 )}
                             </div>
                         )}
